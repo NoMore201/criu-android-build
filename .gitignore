@@ -36,9 +36,17 @@ modules.builtin
 Module.symvers
 *.dwo
 
-# clone folders
+# build & clone folders
 kernel/arm-prebuilt/
 kernel/goldfish/
+criu/arm/
+criu/cross/
+criu/ndk/
+criu/protobuf/
+criu/protobuf-c/
+criu/criu
+*.zip
+
 
 #
 # Top-level generic files

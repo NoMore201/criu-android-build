@@ -16,4 +16,4 @@ cd goldfish
 make clean
 make ARCH=arm CC="${CROSS_COMPILE}gcc" criu_defconfig
 make ARCH=arm CC="${CROSS_COMPILE}gcc" -j$(nproc)
-
+cp arch/arm/boot/zImage $ROOT
