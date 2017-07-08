@@ -4,7 +4,7 @@ export ROOT=`pwd`
 
 PROTOBUF_URL="https://github.com/google/protobuf/archive/v3.3.0.tar.gz"
 PROTOBUFC_URL="https://github.com/protobuf-c/protobuf-c/archive/v1.2.1.tar.gz"
-CRIU_URL="https://github.com/xemul/criu/archive/v3.1.tar.gz"
+CRIU_URL="http://download.openvz.org/criu/criu-2.6.tar.bz2"
 NDK_URL="https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip"
 
 PBUF_DIR="protobuf"
@@ -60,14 +60,17 @@ fi
 
 cd $ROOT
 if [[ ! -d $CRIU_DIR ]]; then
-	curl -L $CRIU_URL > $CRIU_DIR.tar.gz
+	curl -L $CRIU_URL > $CRIU_DIR.tar.bz2
 	mkdir $CRIU_DIR
-	tar --strip=1 -xzvf $CRIU_DIR.tar.gz -C $CRIU_DIR
+	tar --strip=1 -xjvf $CRIU_DIR.tar.bz2 -C $CRIU_DIR
 	cd $ROOT/$CRIU_DIR
+	rm images/google/protobuf/descriptor.proto
+	cp $ROOT/descriptor.proto images/google/protobuf
 	make -j$(nproc) \
 		ARCH=arm \
 		CROSS_COMPILE=$NDK_ROOT/bin/arm-linux-androideabi- \
 		USERCFLAGS="-I${BUILD_DIR}/include -L${BUILD_DIR}/lib" \
+		PATH=/usr/local/bin:$PATH \
 		criu
 fi
 
