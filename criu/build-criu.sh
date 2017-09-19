@@ -2,18 +2,6 @@
 
 export ROOT=`pwd`
 
-function download {
-    curl -L $1 > $1.tar
-}
-
-function untar_gz {
-    tar --strip=1 -xzvf $1.tar -C $1 1>/dev/null
-}
-
-function untar_bz2 {
-    tar --strip=1 -xjvf $1.tar -C $1 1>/dev/null
-}
-
 PROTOBUF_URL="https://github.com/google/protobuf/archive/v3.3.0.tar.gz"
 PROTOBUFC_URL="https://github.com/protobuf-c/protobuf-c/archive/v1.2.1.tar.gz"
 CRIU_URL="http://download.openvz.org/criu/criu-3.3.tar.bz2"
@@ -46,9 +34,9 @@ export CC="arm-linux-androideabi-gcc"
 cp ifaddr.h $SYSROOT/usr/include
 
 if [[ ! -d $LIBNL_DIR ]]; then
-    download $LIBNL_URL
+    printf "\n[*]Downloading $LIBNL_DIR\n\n" && curl -L $LIBNL_URL > $LIBNL_DIR.tar.gz
     mkdir $LIBNL_DIR
-    untar_gz $LIBNL_DIR
+    tar --strip=1 -xzvf $LIBNL_DIR.tar.gz -C $LIBNL_DIR 1>/dev/null
     cd $ROOT/$LIBNL_DIR
     ./configure --prefix=$BUILD_DIR \
         --host=arm-linux-androideabi --disable-pthreads --enable-cli=no \
@@ -60,43 +48,48 @@ fi
 cd $ROOT
 
 if [[ ! -d $LIBNET_DIR ]]; then
-    download $LIBNET_URL
+    printf "\n[*]Downloading $LIBNET_DIR\n\n"
+    curl -L $LIBNET_URL > $LIBNET_DIR.tar.gz
     mkdir $LIBNET_DIR
-    untar_gz $LIBNET_DIR
+    tar --strip=1 -xzvf $LIBNET_DIR.tar.gz -C $LIBNET_DIR 1>/dev/null
     cd $ROOT/$LIBNET_DIR/$LIBNET_DIR
     ./autogen.sh
     ./configure --prefix=$BUILD_DIR \
         --host=arm-linux-androideabi \
         --with-sysroot=$SYSROOT 1>/dev/null
+    printf "\n[*]Compiling $LIBNET_DIR\n\n"
     make -j$(nproc)
+    printf "\n[*]Installing $LIBNET_DIR\n\n"
     make install
 fi
 
 cd $ROOT
 
 if [[ ! -d $PBUF_DIR ]]; then
-    download $PROTOBUF_URL
+    printf "\n[*]Downloading $PBUF_DIR\n\n"
+    curl -L $PROTOBUF_URL > $PBUF_DIR.tar.gz
     mkdir $PBUF_DIR
-    untar_gz $PBUF_DIR
+    tar --strip=1 -xzvf $PBUF_DIR.tar.gz -C $PBUF_DIR 1>/dev/null
     cd $ROOT/$PBUF_DIR
-    ./autogen.sh
+    ./autogen.sh 1>/dev/null
     ./configure --prefix=$BUILD_DIR \
         --host=arm-linux-androideabi \
         --with-sysroot=$SYSROOT \
         --with-protoc=/usr/local/bin/protoc \
         --enable-cross-compile \
-        LDFLAGS="-L/usr/local/lib -llog"
+        LDFLAGS="-L/usr/local/lib -llog" 1>/dev/null
+    printf "\n[*]Compiling $PBUF_DIR\n\n"
     make -j$(nproc)
+    printf "\n[*]Installing $PBUF_DIR\n\n"
     make install
 fi
 
 export PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig
 cd $ROOT
-
 if [[ ! -d $PBUFC_DIR ]]; then
-    download $PROTOBUFC_URL
+    curl -L $PROTOBUFC_URL > $PBUFC_DIR.tar.gz
     mkdir $PBUFC_DIR
-    untar_gz $PBUFC_DIR
+    tar --strip=1 -xzvf $PBUFC_DIR.tar.gz -C $PBUFC_DIR
     cd $ROOT/$PBUFC_DIR
     ./autogen.sh
     CPPFLAGS=`pkg-config --cflags protobuf` \
@@ -107,11 +100,10 @@ if [[ ! -d $PBUFC_DIR ]]; then
 fi
 
 cd $ROOT
-
 if [[ ! -d $CRIU_DIR ]]; then
-    download $CRIU_URL
+    curl -L $CRIU_URL > $CRIU_DIR.tar.bz2
     mkdir $CRIU_DIR
-    untar_bz2 $CRIU_DIR
+    tar --strip=1 -xjvf $CRIU_DIR.tar.bz2 -C $CRIU_DIR
     cd $ROOT/$CRIU_DIR
     rm images/google/protobuf/descriptor.proto
     cp $ROOT/descriptor.proto images/google/protobuf
