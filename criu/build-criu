@@ -61,8 +61,6 @@ if [[ ! -d $LIBNET_DIR ]]; then
     make install
 fi
 
-exit
-
 cd $ROOT
 
 if [[ ! -d $PBUF_DIR ]]; then
