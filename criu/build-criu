@@ -17,12 +17,10 @@ LIBNET_DIR="libnet"
 TARGET="arm"
 
 # Preparing NDK build environment
-[[ ! -e ndk.zip ]] && curl -L $NDK_URL > ndk.zip
-[[ ! -d ndk ]] && unzip ndk.zip -d tmp && d=(tmp/*) && mv $d ./ndk && rm -rf tmp/
-[[ ! -d cross ]] && ndk/build/tools/make-standalone-toolchain.sh \
-    --arch=arm --install-dir=$ROOT/cross \
-    --platform=android-24
-
+if [[ ! -d cross ]]; then
+    echo "Please execute \"setup-ndk\" script first"
+    exit 1
+fi
 
 export NDK_ROOT=$ROOT/cross
 export BUILD_DIR=$ROOT/$TARGET
@@ -31,7 +29,7 @@ export PATH=$NDK_ROOT/bin:$PATH
 export CXX="arm-linux-androideabi-g++"
 export CC="arm-linux-androideabi-gcc"
 
-cp ifaddr.h $SYSROOT/usr/include
+cp ifaddr.h $SYSROOT/usr/include/ifaddrs.h
 
 if [[ ! -d $LIBNL_DIR ]]; then
     printf "\n[*]Downloading $LIBNL_DIR\n\n" && curl -L $LIBNL_URL > $LIBNL_DIR.tar.gz
@@ -62,6 +60,8 @@ if [[ ! -d $LIBNET_DIR ]]; then
     printf "\n[*]Installing $LIBNET_DIR\n\n"
     make install
 fi
+
+exit
 
 cd $ROOT
 
@@ -115,3 +115,7 @@ if [[ ! -d $CRIU_DIR ]]; then
         PATH=/usr/local/bin:$PATH \
         criu
 fi
+
+cd $ROOT
+[[ ! -d ./dist ]] && mkdir dist
+mv $ROOT/$TARGET dist/

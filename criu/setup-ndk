@@ -1,0 +1,16 @@
+#!/bin/bash
+
+NDK_URL="https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip"
+DEST=$(pwd)/cross
+
+if [[ ! -d cross ]]; then
+    [[ ! -e ndk.zip ]] && curl -L $NDK_URL > ndk.zip
+    [[ ! -d ndk ]] && unzip ndk.zip &>/dev/null -d tmp && \
+                      d=(tmp/*) && \
+                      mv $d ./ndk && \
+                      rm -rf tmp/ && \
+                      rm ndk.zip
+    ndk/build/tools/make-standalone-toolchain.sh \
+        --arch=arm --install-dir=$DEST \
+        --platform=android-24
+fi
