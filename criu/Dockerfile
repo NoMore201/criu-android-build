@@ -43,4 +43,4 @@ RUN ./setup-ndk
 
 VOLUME /build/dist
 
-ENTRYPOINT bash /build/build-criu
+#ENTRYPOINT bash /build/build-criu

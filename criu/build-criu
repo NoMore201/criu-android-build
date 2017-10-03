@@ -102,18 +102,17 @@ if [[ ! -d $CRIU_DIR ]]; then
     curl -L $CRIU_URL > $CRIU_DIR.tar.bz2
     mkdir $CRIU_DIR
     tar --strip=1 -xjvf $CRIU_DIR.tar.bz2 -C $CRIU_DIR
-    cd $ROOT/$CRIU_DIR
-    rm images/google/protobuf/descriptor.proto
-    cp $ROOT/descriptor.proto images/google/protobuf
-    make clean
-    make -j$(nproc) \
-        ARCH=arm \
-        CROSS_COMPILE=$NDK_ROOT/bin/arm-linux-androideabi- \
-        USERCFLAGS="-I${BUILD_DIR}/include -L${BUILD_DIR}/lib" \
-        PATH=/usr/local/bin:$PATH \
-        criu
 fi
 
+cd $ROOT/$CRIU_DIR
+rm images/google/protobuf/descriptor.proto
+cp $ROOT/descriptor.proto images/google/protobuf
+make clean
+make -j$(nproc) \
+    ARCH=arm \
+    CROSS_COMPILE=$NDK_ROOT/bin/arm-linux-androideabi- \
+    USERCFLAGS="-I${BUILD_DIR}/include -L${BUILD_DIR}/lib" \
+    PATH=/usr/local/bin:$PATH \
+    criu
+
 cd $ROOT
-[[ ! -d ./dist ]] && mkdir dist
-mv $ROOT/$TARGET dist/
