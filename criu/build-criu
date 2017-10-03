@@ -4,7 +4,7 @@ export ROOT=`pwd`
 
 PROTOBUF_URL="https://github.com/google/protobuf/archive/v3.3.0.tar.gz"
 PROTOBUFC_URL="https://github.com/protobuf-c/protobuf-c/archive/v1.2.1.tar.gz"
-CRIU_URL="http://download.openvz.org/criu/criu-3.3.tar.bz2"
+CRIU_URL="https://github.com/NoMore201/criu/archive/v3.5.tar.gz"
 NDK_URL="https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip"
 LIBNL_URL="https://github.com/thom311/libnl/releases/download/libnl3_3_0/libnl-3.3.0.tar.gz"
 LIBNET_URL="https://github.com/sam-github/libnet/archive/libnet-1.2.tar.gz"
@@ -99,9 +99,9 @@ fi
 
 cd $ROOT
 if [[ ! -d $CRIU_DIR ]]; then
-    curl -L $CRIU_URL > $CRIU_DIR.tar.bz2
+    curl -L $CRIU_URL > $CRIU_DIR.tar.gz
     mkdir $CRIU_DIR
-    tar --strip=1 -xjvf $CRIU_DIR.tar.bz2 -C $CRIU_DIR
+    tar --strip=1 -xzvf $CRIU_DIR.tar.gz -C $CRIU_DIR
 fi
 
 cd $ROOT/$CRIU_DIR
