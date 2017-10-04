@@ -9,6 +9,9 @@ RUN apt-get update && \
     lib32ncurses5-dev \
     libncurses5-dev \
     unzip \
+    git \
+    # editor for interactive session
+    vim \
     tar \
     m4 \
     pkg-config \
