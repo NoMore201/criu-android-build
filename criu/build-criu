@@ -2,7 +2,7 @@
 
 export ROOT=`pwd`
 
-CRIU_URL="https://github.com/NoMore201/criu/archive/v3.5.tar.gz"
+CRIU_URL="https://github.com/NoMore201/criu"
 
 PBUF_DIR="protobuf"
 PBUFC_DIR="protobuf-c"
@@ -19,9 +19,9 @@ export CXX="arm-linux-androideabi-g++"
 export CC="arm-linux-androideabi-gcc"
 
 if [[ ! -d $CRIU_DIR ]]; then
-    curl -L $CRIU_URL > $CRIU_DIR.tar.gz
-    mkdir $CRIU_DIR
-    tar --strip=1 -xzvf $CRIU_DIR.tar.gz -C $CRIU_DIR
+    git clone $CRIU_URL $CRIU_DIR
+    cd $CRIU_DIR
+    git checkout android
 fi
 
 cd $ROOT/$CRIU_DIR
