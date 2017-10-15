@@ -10,7 +10,6 @@ RUN apt-get update && \
     libncurses5-dev \
     unzip \
     git \
-    # editor for interactive session
     vim \
     tar \
     m4 \
