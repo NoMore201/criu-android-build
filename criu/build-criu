@@ -31,7 +31,7 @@ make clean
 make -j$(nproc) \
     ARCH=arm \
     CROSS_COMPILE=$NDK_ROOT/bin/arm-linux-androideabi- \
-    USERCFLAGS="-I${BUILD_DIR}/include -L${BUILD_DIR}/lib" \
+    USERCFLAGS="-D CONFIG_HAS_TCP_REPAIR -I${BUILD_DIR}/include -L${BUILD_DIR}/lib" \
     PATH=/usr/local/bin:$PATH \
     criu
 
