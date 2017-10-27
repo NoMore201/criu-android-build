@@ -9,11 +9,11 @@ git pull && git checkout android-goldfish-3.18
 cd $ROOT
 
 [[ ! -d arm-prebuilt ]] && git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8 arm-prebuilt
-export CROSS_COMPILE=arm-eabi-
+cd $ROOT
 export PATH=$ROOT/arm-prebuilt/bin:$PATH
-cp criu_defconfig goldfish/arch/arm/configs/
+cp criu_arm_defconfig goldfish/arch/arm/configs/
 cd goldfish
 make clean
-make ARCH=arm CC="${CROSS_COMPILE}gcc" criu_defconfig
-make ARCH=arm CC="${CROSS_COMPILE}gcc" -j$(nproc)
+make ARCH=arm  criu_arm_defconfig
+make ARCH=arm SUBARCH=arm  CROSS_COMPILE=arm-eabi-
 cp arch/arm/boot/zImage $ROOT
