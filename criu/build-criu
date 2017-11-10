@@ -21,7 +21,7 @@ export CC="arm-linux-androideabi-gcc"
 if [[ ! -d $CRIU_DIR ]]; then
     git clone $CRIU_URL $CRIU_DIR
     cd $CRIU_DIR
-    git checkout android
+    git checkout android-build
 fi
 
 cd $ROOT/$CRIU_DIR

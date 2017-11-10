@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NDK_URL="https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip"
+NDK_URL="https://dl.google.com/android/repository/android-ndk-r15c-linux-x86_64.zip"
 DEST=$(pwd)/cross
 
 if [[ ! -d cross ]]; then
@@ -12,5 +12,5 @@ if [[ ! -d cross ]]; then
                       rm ndk.zip
     ndk/build/tools/make-standalone-toolchain.sh \
         --arch=arm --install-dir=$DEST \
-        --platform=android-24
+        --platform=android-26
 fi

@@ -4,7 +4,6 @@ export ROOT=`pwd`
 
 PROTOBUF_URL="https://github.com/google/protobuf/archive/v3.3.0.tar.gz"
 PROTOBUFC_URL="https://github.com/protobuf-c/protobuf-c/archive/v1.2.1.tar.gz"
-NDK_URL="https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip"
 LIBNL_URL="https://github.com/thom311/libnl/releases/download/libnl3_3_0/libnl-3.3.0.tar.gz"
 LIBNET_URL="https://github.com/sam-github/libnet/archive/libnet-1.2.tar.gz"
 
