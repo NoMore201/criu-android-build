@@ -1,0 +1,31 @@
+#!/bin/bash
+
+export ROOT=`pwd`
+
+LIBNL_URL="https://github.com/thom311/libnl/releases/download/libnl3_3_0/libnl-3.3.0.tar.gz"
+
+PBUF_DIR="protobuf"
+PBUFC_DIR="protobuf-c"
+CRIU_DIR="criu"
+LIBNL_DIR="libnl"
+LIBNET_DIR="libnet"
+TARGET="arm"
+
+export NDK_ROOT=$ROOT/cross
+export BUILD_DIR=$ROOT/$TARGET
+export SYSROOT=$NDK_ROOT/sysroot
+export PATH=$NDK_ROOT/bin:$PATH
+export CXX="arm-linux-androideabi-g++"
+export CC="arm-linux-androideabi-gcc"
+
+if [[ ! -d $LIBNL_DIR ]]; then
+    printf "\n[*]Downloading $LIBNL_DIR\n\n" && curl -L $LIBNL_URL > $LIBNL_DIR.tar.gz
+    mkdir $LIBNL_DIR
+    tar --strip=1 -xzvf $LIBNL_DIR.tar.gz -C $LIBNL_DIR 1>/dev/null
+    cd $ROOT/$LIBNL_DIR
+    ./configure --prefix=$BUILD_DIR \
+        --host=arm-linux-androideabi --disable-pthreads --enable-cli=no \
+        --with-sysroot=$SYSROOT
+    make -j$(nproc)
+    make install
+fi

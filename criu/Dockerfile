@@ -40,9 +40,8 @@ RUN wget "https://github.com/protobuf-c/protobuf-c/releases/download/v1.3.0/prot
 
 WORKDIR /build
 
-COPY build-criu build-deps descriptor.proto ifaddr.h setup-ndk /build/
+COPY build-* descriptor.proto ifaddr.h setup-ndk /build/
 RUN ./setup-ndk
-RUN ./build-deps
 
 # ensure setup-ndk step is cached
 RUN echo "Done!"

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+export ROOT=`pwd`
+
+PROTOBUFC_URL="https://github.com/protobuf-c/protobuf-c/archive/v1.2.1.tar.gz"
+
+PBUF_DIR="protobuf"
+PBUFC_DIR="protobuf-c"
+CRIU_DIR="criu"
+LIBNL_DIR="libnl"
+LIBNET_DIR="libnet"
+TARGET="arm"
+
+export NDK_ROOT=$ROOT/cross
+export BUILD_DIR=$ROOT/$TARGET
+export SYSROOT=$NDK_ROOT/sysroot
+export PATH=$NDK_ROOT/bin:$PATH
+export CXX="arm-linux-androideabi-g++"
+export CC="arm-linux-androideabi-gcc"
+
+export PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig
+if [[ ! -d $PBUFC_DIR ]]; then
+    curl -L $PROTOBUFC_URL > $PBUFC_DIR.tar.gz
+    mkdir $PBUFC_DIR
+    tar --strip=1 -xzvf $PBUFC_DIR.tar.gz -C $PBUFC_DIR
+    cd $ROOT/$PBUFC_DIR
+    ./autogen.sh
+    CPPFLAGS=`pkg-config --cflags protobuf` \
+    LDFLAGS=`pkg-config --libs protobuf` \
+    ./configure --prefix=$BUILD_DIR \
+        --host=arm-linux-androideabi
+    make -j$(nproc) && make install
+fi
