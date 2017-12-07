@@ -1,27 +1,13 @@
 #!/bin/bash
 
-export ROOT=`pwd`
+source ./env_setup
 
 CRIU_URL="https://github.com/NoMore201/criu"
 
-PBUF_DIR="protobuf"
-PBUFC_DIR="protobuf-c"
 CRIU_DIR="criu"
-LIBNL_DIR="libnl"
-LIBNET_DIR="libnet"
-TARGET="arm"
-
-export NDK_ROOT=$ROOT/cross
-export BUILD_DIR=$ROOT/$TARGET
-export SYSROOT=$NDK_ROOT/sysroot
-export PATH=$NDK_ROOT/bin:$PATH
-export CXX="arm-linux-androideabi-g++"
-export CC="arm-linux-androideabi-gcc"
 
 if [[ ! -d $CRIU_DIR ]]; then
     git clone $CRIU_URL $CRIU_DIR
-    cd $CRIU_DIR
-    git checkout android-build
 fi
 
 cd $ROOT/$CRIU_DIR

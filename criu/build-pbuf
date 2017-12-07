@@ -1,21 +1,10 @@
 #!/bin/bash
 
-export ROOT=`pwd`
+source ./env_setup
 
 PROTOBUF_URL="https://github.com/google/protobuf/archive/v3.1.0.tar.gz"
 
 PBUF_DIR="protobuf"
-TARGET="arm"
-TARGET_HOST="arm-linux-androideabi"
-
-export NDK_ROOT=$ROOT/cross
-export X86_ROOT=$ROOT/intel
-export BUILD_DIR=$ROOT/$TARGET
-export SYSROOT=$NDK_ROOT/sysroot
-export PATH=$NDK_ROOT/bin:$PATH
-export CXX="${TARGET_HOST}-g++"
-export CC="${TARGET_HOST}-gcc"
-export LD="${TARGET_HOST}-ld"
 
 if [[ ! -d $PBUF_DIR ]]; then
     printf "\n[*]Downloading $PBUF_DIR\n\n"
@@ -27,9 +16,11 @@ if [[ ! -d $PBUF_DIR ]]; then
     ./configure --prefix=$BUILD_DIR \
         --host=arm-linux-androideabi \
         --with-sysroot=$SYSROOT \
-        --with-protoc=/usr/local/bin/protoc \
+        --with-protoc=$X86_ROOT/bin/protoc \
+        --disable-shared \
+        --enable-static \
         --enable-cross-compile \
-        LDFLAGS="-L/usr/local/lib -llog" 1>/dev/null
+        LDFLAGS="-L${X86_ROOT}/lib -llog" 1>/dev/null
     printf "\n[*]Compiling $PBUF_DIR\n\n"
     make -j$(nproc)
     printf "\n[*]Installing $PBUF_DIR\n\n"
