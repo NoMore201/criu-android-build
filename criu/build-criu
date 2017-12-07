@@ -16,8 +16,8 @@ cp $ROOT/descriptor.proto images/google/protobuf
 make clean
 make -j$(nproc) \
     ARCH=arm \
-    CROSS_COMPILE=$NDK_ROOT/bin/arm-linux-androideabi- \
-    USERCFLAGS="-DCONFIG_HAS_TCP_REPAIR -DANDROID_BUILD -I${BUILD_DIR}/include -L${BUILD_DIR}/lib" \
+    CROSS_COMPILE=$NDK_ROOT/bin/$TARGET_HOST- \
+    CFLAGS="`pkg-config --cflags libprotobuf-c`" LDFLAGS="`pkg-config --libs libprotobuf-c`" \
     PATH=/usr/local/bin:$PATH \
     criu
 

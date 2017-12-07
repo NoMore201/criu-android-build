@@ -41,15 +41,12 @@ RUN wget "https://github.com/protobuf-c/protobuf-c/releases/download/v1.3.0/prot
     export PKG_CONFIG_PATH=/build/intel/lib/pkgconfig && \
     CPPFLAGS=`pkg-config --cflags protobuf` LDFLAGS=`pkg-config --libs protobuf` ./configure \
         --prefix=/build/intel --disable-shared --enable-static && \
-    make -j$(nproc) && make install && \
-    rm -rf /protoc
+    make -j$(nproc) && make install
 
 WORKDIR /build
 
-COPY build-* descriptor.proto ifaddr.h setup-ndk /build/
+COPY build-* descriptor.proto env_setup ifaddr.h setup-ndk /build/
 RUN ./setup-ndk
 
 # ensure setup-ndk step is cached
 RUN echo "Done!"
-
-#ENTRYPOINT bash /build/build-criu

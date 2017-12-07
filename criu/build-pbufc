@@ -16,6 +16,7 @@ if [[ ! -d $PBUFC_DIR ]]; then
     CPPFLAGS=`pkg-config --cflags protobuf` \
     LDFLAGS=`pkg-config --libs protobuf` \
     ./configure --prefix=$BUILD_DIR \
+        --disable-shared --enable-static --disable-protoc \
         --host=$TARGET_HOST
     make -j$(nproc) && make install
 fi

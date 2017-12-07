@@ -1,22 +1,9 @@
 #!/bin/bash
 
-export ROOT=`pwd`
-
+ROOT=`pwd`
+X86_ROOT=$ROOT/intel
 LIBNET_URL="https://github.com/sam-github/libnet/archive/libnet-1.2.tar.gz"
-
-PBUF_DIR="protobuf"
-PBUFC_DIR="protobuf-c"
-CRIU_DIR="criu"
-LIBNL_DIR="libnl"
 LIBNET_DIR="libnet"
-TARGET="arm"
-
-export NDK_ROOT=$ROOT/cross
-export BUILD_DIR=$ROOT/$TARGET
-export SYSROOT=$NDK_ROOT/sysroot
-export PATH=$NDK_ROOT/bin:$PATH
-export CXX="arm-linux-androideabi-g++"
-export CC="arm-linux-androideabi-gcc"
 
 if [[ ! -d $LIBNET_DIR ]]; then
     printf "\n[*]Downloading $LIBNET_DIR\n\n"
@@ -25,9 +12,7 @@ if [[ ! -d $LIBNET_DIR ]]; then
     tar --strip=1 -xzvf $LIBNET_DIR.tar.gz -C $LIBNET_DIR 1>/dev/null
     cd $ROOT/$LIBNET_DIR/$LIBNET_DIR
     ./autogen.sh
-    ./configure --prefix=$BUILD_DIR \
-        --host=arm-linux-androideabi \
-        --with-sysroot=$SYSROOT 1>/dev/null
+    ./configure --prefix=$X86_ROOT
     printf "\n[*]Compiling $LIBNET_DIR\n\n"
     make -j$(nproc)
     printf "\n[*]Installing $LIBNET_DIR\n\n"
