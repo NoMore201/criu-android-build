@@ -2,21 +2,20 @@
 
 export ROOT=`pwd`
 
-PROTOBUF_URL="https://github.com/google/protobuf/archive/v3.3.0.tar.gz"
+PROTOBUF_URL="https://github.com/google/protobuf/archive/v3.1.0.tar.gz"
 
 PBUF_DIR="protobuf"
-PBUFC_DIR="protobuf-c"
-CRIU_DIR="criu"
-LIBNL_DIR="libnl"
-LIBNET_DIR="libnet"
 TARGET="arm"
+TARGET_HOST="arm-linux-androideabi"
 
 export NDK_ROOT=$ROOT/cross
+export X86_ROOT=$ROOT/intel
 export BUILD_DIR=$ROOT/$TARGET
 export SYSROOT=$NDK_ROOT/sysroot
 export PATH=$NDK_ROOT/bin:$PATH
-export CXX="arm-linux-androideabi-g++"
-export CC="arm-linux-androideabi-gcc"
+export CXX="${TARGET_HOST}-g++"
+export CC="${TARGET_HOST}-gcc"
+export LD="${TARGET_HOST}-ld"
 
 if [[ ! -d $PBUF_DIR ]]; then
     printf "\n[*]Downloading $PBUF_DIR\n\n"
