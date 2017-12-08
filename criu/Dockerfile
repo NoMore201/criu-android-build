@@ -24,8 +24,7 @@ RUN mkdir -p /build/intel
 COPY build-* descriptor.proto env_setup ifaddr.h setup-ndk /build/
 
 WORKDIR /build
-RUN ./setup-ndk && \
-    ./build-libnet
+RUN ./setup-ndk
 
 WORKDIR /proto
 
