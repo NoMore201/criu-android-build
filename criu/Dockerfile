@@ -21,6 +21,11 @@ RUN apt-get update && \
     automake
 
 RUN mkdir -p /build/intel
+COPY build-* descriptor.proto env_setup ifaddr.h setup-ndk /build/
+
+WORKDIR /build
+RUN ./setup-ndk && \
+    ./build-libnet
 
 WORKDIR /proto
 
@@ -45,8 +50,6 @@ RUN wget "https://github.com/protobuf-c/protobuf-c/releases/download/v1.3.0/prot
 
 WORKDIR /build
 
-COPY build-* descriptor.proto env_setup ifaddr.h setup-ndk /build/
-RUN ./setup-ndk
 
 # ensure setup-ndk step is cached
 RUN echo "Done!"

@@ -15,11 +15,9 @@ if [[ ! -d $PBUF_DIR ]]; then
     ./autogen.sh 1>/dev/null
     ./configure --prefix=$BUILD_DIR \
         --host=arm-linux-androideabi \
-        --with-sysroot=$SYSROOT \
         --with-protoc=$X86_ROOT/bin/protoc \
         --disable-shared \
         --enable-static \
-        --enable-cross-compile \
         LDFLAGS="-L${X86_ROOT}/lib -llog" 1>/dev/null
     printf "\n[*]Compiling $PBUF_DIR\n\n"
     make -j$(nproc)
