@@ -21,7 +21,7 @@ RUN apt-get update && \
     automake
 
 RUN mkdir -p /build/intel
-COPY build-* descriptor.proto env_setup ifaddr.h setup-ndk /build/
+COPY build-* env_setup setup-ndk /build/
 
 WORKDIR /build
 RUN ./setup-ndk

@@ -3,22 +3,20 @@
 source ./env_setup
 
 CRIU_URL="https://github.com/NoMore201/criu"
-
 CRIU_DIR="criu"
+export PKG_CONFIG_PATH=$X86_ROOT/lib/pkgconfig
 
 if [[ ! -d $CRIU_DIR ]]; then
     git clone $CRIU_URL $CRIU_DIR
 fi
 
 cd $ROOT/$CRIU_DIR
-rm images/google/protobuf/descriptor.proto
-cp $ROOT/descriptor.proto images/google/protobuf
 make clean
 make -j$(nproc) \
     ARCH=arm \
     CROSS_COMPILE=$NDK_ROOT/bin/$TARGET_HOST- \
     CFLAGS="`pkg-config --cflags libprotobuf-c`" LDFLAGS="`pkg-config --libs libprotobuf-c`" \
-    PATH=/usr/local/bin:$PATH \
+    PATH=$X86_ROOT/bin:$PATH \
     criu
 
 cd $ROOT
