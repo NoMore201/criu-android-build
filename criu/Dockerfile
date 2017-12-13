@@ -24,8 +24,14 @@ RUN mkdir -p /build/intel
 COPY build-* env_setup setup-ndk /build/
 
 WORKDIR /build
+
+# Setup android NDK toolchain inside the /build/cross dir
 RUN ./setup-ndk
 
+# Build libnet for the host architecture
+RUN ./build-libnet
+
+# Build protobuf for the host architecture
 WORKDIR /proto
 
 RUN wget "https://github.com/google/protobuf/archive/v3.1.0.tar.gz" && \
@@ -34,8 +40,9 @@ RUN wget "https://github.com/google/protobuf/archive/v3.1.0.tar.gz" && \
     ./configure --prefix=/build/intel \
         --disable-shared \
         --enable-static && \
-    make -j$(nproc) && make install
+    make && make install
 
+# Build protobuf-c for the host architecture
 WORKDIR /protoc
 
 RUN wget "https://github.com/protobuf-c/protobuf-c/releases/download/v1.3.0/protobuf-c-1.3.0.tar.gz" && \
@@ -45,7 +52,7 @@ RUN wget "https://github.com/protobuf-c/protobuf-c/releases/download/v1.3.0/prot
     export PKG_CONFIG_PATH=/build/intel/lib/pkgconfig && \
     CPPFLAGS=`pkg-config --cflags protobuf` LDFLAGS=`pkg-config --libs protobuf` ./configure \
         --prefix=/build/intel --disable-shared --enable-static && \
-    make -j$(nproc) && make install
+    make && make install
 
 WORKDIR /build
 
