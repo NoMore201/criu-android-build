@@ -15,7 +15,8 @@ make clean
 make -j$(nproc) \
     ARCH=arm \
     CROSS_COMPILE=$NDK_ROOT/bin/$TARGET_HOST- \
-    CFLAGS="`pkg-config --cflags libprotobuf-c`" LDFLAGS="`pkg-config --libs libprotobuf-c`" \
+    CFLAGS="`pkg-config --cflags libprotobuf-c` -D CONFIG_ARMV7" \
+    LDFLAGS="`pkg-config --libs libprotobuf-c`" \
     PATH=$X86_ROOT/bin:$PATH \
     criu
 
