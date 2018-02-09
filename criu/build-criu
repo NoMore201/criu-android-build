@@ -11,11 +11,13 @@ if [[ ! -d $CRIU_DIR ]]; then
 fi
 
 cd $ROOT/$CRIU_DIR
+git checkout android-build
 make clean
 make -j$(nproc) \
     ARCH=arm \
     CROSS_COMPILE=$NDK_ROOT/bin/$TARGET_HOST- \
-    CFLAGS="`pkg-config --cflags libprotobuf-c`" LDFLAGS="`pkg-config --libs libprotobuf-c`" \
+    CFLAGS="`pkg-config --cflags libprotobuf-c` -D ANDROID_BUILD"
+    LDFLAGS="`pkg-config --libs libprotobuf-c`" \
     PATH=$X86_ROOT/bin:$PATH \
     criu
 
