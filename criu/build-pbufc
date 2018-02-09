@@ -1,21 +1,29 @@
 #!/bin/bash
 
-source ./env_setup
+ROOT_DIR=`pwd`
+TARGET="arm"
+TARGET_HOST="arm-linux-androideabi"
+ARM_PREFIX=$ROOT_DIR/arm
+NDK_ROOT=$ROOT_DIR/cross
+SYSROOT=$NDK_ROOT/sysroot
+PATH=$NDK_ROOT/bin:$PATH
+CXX="${TARGET_HOST}-g++"
+CC="${TARGET_HOST}-gcc"
+LD="${TARGET_HOST}-ld"
 
-PROTOBUFC_URL="https://github.com/protobuf-c/protobuf-c/archive/v1.3.0.tar.gz"
-
+PBUFC_URL="https://github.com/protobuf-c/protobuf-c/archive/v1.3.0.tar.gz"
 PBUFC_DIR="protobuf-c"
 
-export PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig
+export PKG_CONFIG_PATH=$ARM_PREFIX/lib/pkgconfig
 if [[ ! -d $PBUFC_DIR ]]; then
-    curl -L $PROTOBUFC_URL > $PBUFC_DIR.tar.gz
+    curl -L $PBUFC_URL > $PBUFC_DIR.tar.gz
     mkdir $PBUFC_DIR
     tar --strip=1 -xzvf $PBUFC_DIR.tar.gz -C $PBUFC_DIR
-    cd $ROOT/$PBUFC_DIR
+    cd $ROOT_DIR/$PBUFC_DIR
     ./autogen.sh
     CPPFLAGS=`pkg-config --cflags protobuf` \
     LDFLAGS=`pkg-config --libs protobuf` \
-    ./configure --prefix=$BUILD_DIR \
+    ./configure --prefix=$ARM_PREFIX \
         --disable-shared --enable-static --disable-protoc \
         --host=$TARGET_HOST
     make -j$(nproc) && make install
