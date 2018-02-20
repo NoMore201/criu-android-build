@@ -27,7 +27,7 @@ RUN apt-get update && \
     libnet1-dev
 
 RUN mkdir -p /build/intel
-COPY build-* env_setup setup-ndk /build/
+COPY build-* setup-ndk /build/
 
 WORKDIR /build
 
