@@ -13,8 +13,8 @@ LD="${TARGET_HOST}-ld"
 
 PBUFC_URL="https://github.com/protobuf-c/protobuf-c/archive/v1.3.0.tar.gz"
 PBUFC_DIR="protobuf-c"
-
 export PKG_CONFIG_PATH=$ARM_PREFIX/lib/pkgconfig
+
 if [[ ! -d $PBUFC_DIR ]]; then
     curl -L $PBUFC_URL > $PBUFC_DIR.tar.gz
     mkdir $PBUFC_DIR

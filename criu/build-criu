@@ -1,24 +1,32 @@
 #!/bin/bash
 
-source ./env_setup
+ROOT_DIR=`pwd`
+TARGET="arm"
+TARGET_HOST="arm-linux-androideabi"
+ARM_PREFIX=$ROOT_DIR/arm
+NDK_ROOT=$ROOT_DIR/cross
+SYSROOT=$NDK_ROOT/sysroot
+PATH=$NDK_ROOT/bin:$PATH
+CXX="${TARGET_HOST}-g++"
+CC="${TARGET_HOST}-gcc"
+LD="${TARGET_HOST}-ld"
 
 CRIU_URL="https://github.com/NoMore201/criu"
 CRIU_DIR="criu"
-export PKG_CONFIG_PATH=$X86_ROOT/lib/pkgconfig
+export PKG_CONFIG_PATH=$ARM_PREFIX/lib/pkgconfig
 
 if [[ ! -d $CRIU_DIR ]]; then
     git clone $CRIU_URL $CRIU_DIR
 fi
 
-cd $ROOT/$CRIU_DIR
+cd $ROOT_DIR/$CRIU_DIR
 git checkout android-build
 make clean
 make -j$(nproc) \
     ARCH=arm \
     CROSS_COMPILE=$NDK_ROOT/bin/$TARGET_HOST- \
-    CFLAGS="`pkg-config --cflags libprotobuf-c` -D ANDROID_BUILD" \
-    LDFLAGS="`pkg-config --libs libprotobuf-c`" \
-    PATH=$X86_ROOT/bin:$PATH \
+    CFLAGS="`pkg-config --cflags libprotobuf-c` -D ANDROID_BUILD -fPIE -fPIC" \
+    LDFLAGS="`pkg-config --libs libprotobuf-c` -pie" \
     criu
 
 cd $ROOT
