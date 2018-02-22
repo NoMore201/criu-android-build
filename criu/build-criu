@@ -25,7 +25,7 @@ make clean
 make -j$(nproc) \
     ARCH=arm \
     CROSS_COMPILE=$NDK_ROOT/bin/$TARGET_HOST- \
-    CFLAGS="`pkg-config --cflags libprotobuf-c` -D ANDROID_BUILD -fPIE -fPIC" \
+    CFLAGS="`pkg-config --cflags libprotobuf-c` -D ANDROID_BUILD -D CONFIG_ARMV7 -fPIE -fPIC" \
     LDFLAGS="`pkg-config --libs libprotobuf-c` -pie" \
     criu
 
